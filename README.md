@@ -1,24 +1,78 @@
-# README
+# APIでdevise_token_auth実装〜Rspecテスト
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Version
 
-Things you may want to cover:
+`ruby 2.6.1`
 
-* Ruby version
+`rails 5.2.3`
 
-* System dependencies
+## テスト項目
 
-* Configuration
+### モデル
 
-* Database creation
+- 全カラムの値を指定してるとき、レコードが作成されること
 
-* Database initialization
+- emailを指定していないとき、エラーになること
 
-* How to run the test suite
+- passwordを指定していないとき、エラーになること
 
-* Services (job queues, cache servers, search engines, etc.)
+- すでに保存されているemailを指定したとき、エラーになること
 
-* Deployment instructions
+### コントローラ
 
-* ...
+- ユーザー情報保存処理
+
+  - ユーザーが登録できること
+
+    - response.body["status"] = "success"
+
+    - response.body["data"]["id"] = 登録しユーザーid
+
+    - response.body["data"]["email"] = 登録したユーザーemail
+
+    - response.status = 200
+
+- ログイン処理
+  - email、passwordが正しいとき、ログインできること
+    - response.headers["uid"]が存在する
+
+    - response.headers["access-token"]が存在する
+
+    - response.headers["client"]が存在する
+
+    - response.status = 200
+
+  - emailが正しくない場合、ログインできないこと
+
+    - response.body["success"] = false
+
+    - response.body["errors"]が想定したエラー文と等しい
+
+    - response.headers["uid"]が空
+
+    - response.headers["access-token"]が空
+
+    - response.headers["client"]が空
+
+    - response.status = 401
+
+  - passwordが正しくない場合、ログインできないこと
+
+    - response.body["success"] = false
+
+    - response.body["errors"]が想定したエラー文と等しい
+
+    - response.headers["uid"]が空
+
+    - response.headers["access-token"]が空
+
+    - response.headers["client"]が空
+
+    - response.status = 401
+
+- ログアウト処理
+
+  - ログインしているとき、ログアウトできること
+
+    - response.body["success"] = true
+    - response.status = 200
