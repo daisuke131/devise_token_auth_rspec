@@ -1,0 +1,5 @@
+{
+  "name": "devise_token_auth_rspec",
+  "private": true,
+  "dependencies": {}
+}
